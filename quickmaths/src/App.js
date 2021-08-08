@@ -1,25 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component{
+
+  state = {
+    test: 0
+  }
+
+  render(){
+
+    const mathFunction = (x, clear) =>{
+      const chosenTable = x || 16;
+      let secondCounter = 0;
+      let scoreCounter = 0;
+    }
+
+    return (
+      
+      <div>
+        <button onClick={()=>{mathFunction()}}>Click here to start timer</button>
+        {this.state.test}
+      </div>
+    );
+  }
 }
 
 export default App;
