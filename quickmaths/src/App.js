@@ -12,7 +12,9 @@ class App extends Component{
     multiplication: 0,
     gameOn:false,
     potentialAnswer: 0,
-    scoreCounter: 0
+    scoreCounter: 0,
+    includeDivision: false,
+    randomSymbol: 0
   }
 
   render(){
@@ -70,6 +72,15 @@ class App extends Component{
     }
 
     const gameFunc = (x) =>{
+      let randomSymbol;
+      if(this.state.includeDivision){ randomSymbol = Math.floor(Math.random() * 2)}
+      else{randomSymbol = 0}
+      if(randomSymbol === 0){
+        this.setState({randomSymbol: "*"})
+      }
+      else{
+        this.setState({randomSymbol: "/"})
+      }
       let tableVariable;
       if(this.state.specificTable){
         tableVariable = this.state.table;
@@ -83,16 +94,50 @@ class App extends Component{
       if(!this.state.correctAnswer){
         let multiplicationVariable = Math.floor(Math.random() * 12);
         multiplicationVariable++;
-        let correctAnswerVariable = multiplicationVariable * tableVariable;
+        let correctAnswerVariable;
+        if(randomSymbol === 0){
+          correctAnswerVariable = multiplicationVariable * tableVariable;
+        }
+        else{
+          let biggerNumber = Math.max(multiplicationVariable, tableVariable);
+          let smallerNumber = Math.min(multiplicationVariable, tableVariable)
+          correctAnswerVariable = biggerNumber / smallerNumber
+        }
+        
         this.setState({correctAnswer: correctAnswerVariable, multiplication: multiplicationVariable})
       }
       if(x === true && this.state.secondCount >0){
         let multiplicationVariable = Math.floor(Math.random() * 12);
         multiplicationVariable++;
-        let correctAnswerVariable = multiplicationVariable * tableVariable;
+        let correctAnswerVariable;
+        if(randomSymbol === 0){
+          correctAnswerVariable = multiplicationVariable * tableVariable;
+        }
+        else{
+          let biggerNumber = Math.max(multiplicationVariable, tableVariable);
+          let smallerNumber = Math.min(multiplicationVariable, tableVariable)
+          correctAnswerVariable = biggerNumber / smallerNumber
+        }
         this.setState({correctAnswer: correctAnswerVariable, secondCount: this.state.secondCount+2, multiplication: multiplicationVariable, scoreCounter: this.state.scoreCounter+1})
       }
       console.log(this.state.specificTable)
+    }
+
+    const leftNumber = () =>{
+      if(this.state.randomSymbol === "/"){
+        return Math.max(this.state.table, this.state.multiplication)
+      }
+      else{
+        return this.state.table
+      }
+    }
+    const rightNumber = () =>{
+      if(this.state.randomSymbol === "/"){
+        return Math.min(this.state.table, this.state.multiplication)
+      }
+      else{
+        return this.state.multiplication
+      }
     }
 
     return (
@@ -102,13 +147,14 @@ class App extends Component{
           <div class="game-div">
             <input type="number" min="2" max="20" onChange={setTable}></input><br/>
             <button onClick={()=>{timerFunc()}}>Click here to start</button>
-            <button onClick={()=>{this.setState({secondCount: this.state.secondCount+1})}}>increase</button>
+            <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
+            <label for="include-division">Include division</label><br></br>
             {clearIntervalFunc()}
           </div>:
           <div class="game-div">
             
             Time:{this.state.secondCount} Score: {this.state.scoreCounter}<br/>
-            {this.state.table} x {this.state.multiplication} = 
+            {leftNumber()} {this.state.randomSymbol} {rightNumber()} = 
             {clearIntervalFunc()}
             <input type="number"onChange={handleAnswer}></input>
           </div>
