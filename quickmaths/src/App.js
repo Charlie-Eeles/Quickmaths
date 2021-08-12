@@ -163,18 +163,18 @@ class App extends Component{
       <div id="flex-container">
         {!this.state.gameOn ?
           (<div class="game-div">
-            Table: <input type="number" min="1" max="20" onChange={setTable}></input><br/><br/>
-            <button onClick={()=>{timerFunc()}}>Click here to start</button>
+            Table: <input type="number" min="1" max="20" onChange={setTable}></input><br/>
+            <button onClick={()=>{timerFunc()}}>Click here to start</button><br/>
             <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
-            <label for="include-division">Include division</label><br/><br/>
-            High score: {parseInt(localStorage.getItem("highscore")) || 0}<br/><br/>
+            <label for="include-division">Include division</label><br/><br/><br/>
+            High score: {parseInt(localStorage.getItem("highscore")) || 0}<br/>
             To set a high score, you must leave<br/> the table blank and include division!
             {clearIntervalFunc()}
           </div>):
           (this.state.secondCount > 0 ?
           (<div class="game-div">
-            Time:{this.state.secondCount} Score: {this.state.scoreCounter}<br/>
-            {leftNumber()} {this.state.randomSymbol} {rightNumber()} = 
+            Time:{this.state.secondCount} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Score: {this.state.scoreCounter}<br/><br/>
+            {leftNumber()} {this.state.randomSymbol} {rightNumber()} = &nbsp;&nbsp;
             {clearIntervalFunc()}
             <input type="number"onChange={handleAnswer}></input>
           </div>):
