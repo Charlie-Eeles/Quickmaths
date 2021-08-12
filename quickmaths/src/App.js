@@ -100,7 +100,13 @@ class App extends Component{
         }
         else{
           let biggerNumber = Math.max(multiplicationVariable, tableVariable);
-          let smallerNumber = Math.min(multiplicationVariable, tableVariable)
+          let smallerNumber = Math.min(multiplicationVariable, tableVariable);
+          while(biggerNumber % smallerNumber != 0){
+            multiplicationVariable = Math.floor(Math.random() * 12);
+            multiplicationVariable++;
+            smallerNumber = Math.min(multiplicationVariable, tableVariable);
+            biggerNumber = Math.max(multiplicationVariable, tableVariable);
+          }
           correctAnswerVariable = biggerNumber / smallerNumber
         }
         
@@ -116,6 +122,12 @@ class App extends Component{
         else{
           let biggerNumber = Math.max(multiplicationVariable, tableVariable);
           let smallerNumber = Math.min(multiplicationVariable, tableVariable)
+          while(biggerNumber % smallerNumber != 0){
+            multiplicationVariable = Math.floor(Math.random() * 12);
+            multiplicationVariable++;
+            smallerNumber = Math.min(multiplicationVariable, tableVariable);
+            biggerNumber = Math.max(multiplicationVariable, tableVariable);
+          }
           correctAnswerVariable = biggerNumber / smallerNumber
         }
         this.setState({correctAnswer: correctAnswerVariable, secondCount: this.state.secondCount+2, multiplication: multiplicationVariable, scoreCounter: this.state.scoreCounter+1})
