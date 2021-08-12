@@ -38,7 +38,7 @@ class App extends Component{
           e.target.value = minFloat;
       }
 
-      if(valFloat>1 && valFloat<20){
+      if(valFloat>1 && valFloat<=20){
         this.setState({table: valFloat, specificTable:true})
       }
       else{
@@ -145,7 +145,7 @@ class App extends Component{
       <div id="flex-container">
         {!this.state.gameOn ?
           <div class="game-div">
-            <input type="number" min="2" max="20" onChange={setTable}></input><br/>
+            <input type="number" min="1" max="20" onChange={setTable}></input><br/>
             <button onClick={()=>{timerFunc()}}>Click here to start</button>
             <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
             <label for="include-division">Include division</label><br></br>
