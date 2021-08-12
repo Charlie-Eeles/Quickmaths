@@ -14,7 +14,8 @@ class App extends Component{
     potentialAnswer: 0,
     scoreCounter: 0,
     includeDivision: false,
-    randomSymbol: 0
+    randomSymbol: 0,
+    createHighScore: false
   }
 
   render(){
@@ -49,9 +50,7 @@ class App extends Component{
     const handleAnswer = (e) => {
       const valFloat = parseFloat(e.target.value);
       this.setState({potentialAnswer: valFloat})
-      console.log(this.state.correctAnswer)
       if(this.state.correctAnswer === valFloat && this.state.correctAnswer !== false){
-        console.log("correct")
         gameFunc(true);
         e.target.value=""
       }
@@ -59,6 +58,7 @@ class App extends Component{
 
     const timerFunc = () =>{
       if( this.state.secondCount <=0){
+        if(!this.state.specificTable && this.state.includeDivision){this.setState({createHighScore: true})}
         this.setState({secondCount: 5, gameOn: true})
         this.setState({interval : setInterval(()=> {this.setState({secondCount: this.state.secondCount-1})}, 1000)})
         gameFunc()
@@ -101,7 +101,7 @@ class App extends Component{
         else{
           let biggerNumber = Math.max(multiplicationVariable, tableVariable);
           let smallerNumber = Math.min(multiplicationVariable, tableVariable);
-          while(biggerNumber % smallerNumber != 0){
+          while(biggerNumber % smallerNumber !== 0){
             multiplicationVariable = Math.floor(Math.random() * 12);
             multiplicationVariable++;
             smallerNumber = Math.min(multiplicationVariable, tableVariable);
@@ -122,7 +122,7 @@ class App extends Component{
         else{
           let biggerNumber = Math.max(multiplicationVariable, tableVariable);
           let smallerNumber = Math.min(multiplicationVariable, tableVariable)
-          while(biggerNumber % smallerNumber != 0){
+          while(biggerNumber % smallerNumber !== 0){
             multiplicationVariable = Math.floor(Math.random() * 12);
             multiplicationVariable++;
             smallerNumber = Math.min(multiplicationVariable, tableVariable);
@@ -132,7 +132,6 @@ class App extends Component{
         }
         this.setState({correctAnswer: correctAnswerVariable, secondCount: this.state.secondCount+2, multiplication: multiplicationVariable, scoreCounter: this.state.scoreCounter+1})
       }
-      console.log(this.state.specificTable)
     }
 
     const leftNumber = () =>{
@@ -152,24 +151,41 @@ class App extends Component{
       }
     }
 
+    const setHighscore = () =>{
+      let highscore = parseInt(localStorage.getItem("highscore"));
+      if(!highscore){localStorage.setItem("highscore", this.state.scoreCounter); return this.state.scoreCounter}
+      else if(this.state.scoreCounter > highscore){localStorage.setItem("highscore", this.state.scoreCounter); return this.state.scoreCounter}
+      return highscore;
+    }
+
     return (
       
       <div id="flex-container">
         {!this.state.gameOn ?
-          <div class="game-div">
-            <input type="number" min="1" max="20" onChange={setTable}></input><br/>
+          (<div class="game-div">
+            Table: <input type="number" min="1" max="20" onChange={setTable}></input><br/><br/>
             <button onClick={()=>{timerFunc()}}>Click here to start</button>
             <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
-            <label for="include-division">Include division</label><br></br>
+            <label for="include-division">Include division</label><br/><br/>
+            High score: {parseInt(localStorage.getItem("highscore")) || 0}<br/><br/>
+            To set a high score, you must leave<br/> the table blank and include division!
             {clearIntervalFunc()}
-          </div>:
-          <div class="game-div">
-            
+          </div>):
+          (this.state.secondCount > 0 ?
+          (<div class="game-div">
             Time:{this.state.secondCount} Score: {this.state.scoreCounter}<br/>
             {leftNumber()} {this.state.randomSymbol} {rightNumber()} = 
             {clearIntervalFunc()}
             <input type="number"onChange={handleAnswer}></input>
-          </div>
+          </div>):
+          (<div class="game-div">
+            {}
+            Score: {this.state.scoreCounter}<br/>
+            {this.state.createHighScore ? <p>High score: {setHighscore()}</p>: <p></p>}
+            <button onClick={()=>{window.location.reload()}}>Restart</button>
+          </div>)
+          )
+          
         }
       </div>
     );
