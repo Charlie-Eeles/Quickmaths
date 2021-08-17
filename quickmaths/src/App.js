@@ -185,11 +185,10 @@ class App extends Component{
             Table: <input type="number" min="1" max="20" onChange={setTable}></input><br/>
             {/* min and max set the parameters for the input/table , if you change the limit you must also change it in "setTable" */}
 
-            <button onClick={()=>{timerFunc()}}>Click here to start</button><br/>
-
             <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
+            <label for="include-division">Include division</label><br/>
 
-            <label for="include-division">Include division</label><br/><br/><br/>
+            <button onClick={()=>{timerFunc()}}>Click here to start</button><br/><br/><br/>
             
             High score: {parseInt(localStorage.getItem("highscore")) || 0}<br/>
             To set a high score, you must leave<br/> the table blank and include division!
