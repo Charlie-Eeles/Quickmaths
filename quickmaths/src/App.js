@@ -25,7 +25,7 @@ class App extends Component{
       const maxFloat = parseFloat(e.target.max);
       const minFloat = parseFloat(e.target.min);
 
-      if(valFloat === NaN){e.target.value = minFloat || 0}
+      if(isNaN(valFloat)){e.target.value = minFloat || 0}
       if(valFloat > maxFloat){
           const stateFloat = parseFloat(this.state.table);
           if(stateFloat && stateFloat < maxFloat){
@@ -35,6 +35,7 @@ class App extends Component{
           e.target.value = maxFloat;  
           }
       }
+      
       if(valFloat < minFloat){
           e.target.value = minFloat;
       }
@@ -42,6 +43,11 @@ class App extends Component{
       if(valFloat>1 && valFloat<=20){
         this.setState({table: valFloat, specificTable:true})
       }
+      // This controls the limits of the table, if the entered table is 
+      // outside the range it'll act as if one wasn't set.
+      // increase the max number and "max" tag on the table input 
+      // to change the table limits.
+
       else{
         this.setState({specificTable:false})
       }
@@ -49,7 +55,9 @@ class App extends Component{
 
     const handleAnswer = (e) => {
       const valFloat = parseFloat(e.target.value);
+
       this.setState({potentialAnswer: valFloat})
+
       if(this.state.correctAnswer === valFloat && this.state.correctAnswer !== false){
         gameFunc(true);
         e.target.value=""
@@ -57,10 +65,14 @@ class App extends Component{
     }
 
     const timerFunc = () =>{
-      if( this.state.secondCount <=0){
+      if(this.state.secondCount <=0){
         if(!this.state.specificTable && this.state.includeDivision){this.setState({createHighScore: true})}
-        this.setState({secondCount: 5, gameOn: true})
-        this.setState({interval : setInterval(()=> {this.setState({secondCount: this.state.secondCount-1})}, 1000)})
+        
+        this.setState({
+          secondCount: 5, 
+          gameOn: true, 
+          interval : setInterval(()=> {this.setState({secondCount: this.state.secondCount-1})}, 1000)
+        })
         gameFunc()
       }
     }
@@ -73,15 +85,21 @@ class App extends Component{
 
     const gameFunc = (x) =>{
       let randomSymbol;
-      if(this.state.includeDivision){ randomSymbol = Math.floor(Math.random() * 2)}
+      let tableVariable;
+
+      if(this.state.includeDivision){
+        randomSymbol = Math.floor(Math.random() * 2)
+      }
       else{randomSymbol = 0}
+      
       if(randomSymbol === 0){
         this.setState({randomSymbol: "*"})
       }
       else{
         this.setState({randomSymbol: "/"})
       }
-      let tableVariable;
+      
+
       if(this.state.specificTable){
         tableVariable = this.state.table;
       }
@@ -91,46 +109,43 @@ class App extends Component{
         this.setState({table: tableVariable})
       }
 
-      if(!this.state.correctAnswer){
+
+      const setVariables = () => {
         let multiplicationVariable = Math.floor(Math.random() * 12);
         multiplicationVariable++;
         let correctAnswerVariable;
+
         if(randomSymbol === 0){
           correctAnswerVariable = multiplicationVariable * tableVariable;
         }
         else{
           let biggerNumber = Math.max(multiplicationVariable, tableVariable);
           let smallerNumber = Math.min(multiplicationVariable, tableVariable);
+
           while(biggerNumber % smallerNumber !== 0){
             multiplicationVariable = Math.floor(Math.random() * 12);
             multiplicationVariable++;
             smallerNumber = Math.min(multiplicationVariable, tableVariable);
             biggerNumber = Math.max(multiplicationVariable, tableVariable);
           }
+          // The while loop makes it so it'll only produce quotients with no remainder. 
+          // If you remove the while loop I'd recommend setting all instances of the correct answer to 
+          // "x" decimal places w/ correctAnswer.toFixed(x)
+
           correctAnswerVariable = biggerNumber / smallerNumber
         }
         
         this.setState({correctAnswer: correctAnswerVariable, multiplication: multiplicationVariable})
       }
+
+      if(!this.state.correctAnswer){
+        setVariables();
+      }
+
+
       if(x === true && this.state.secondCount >0){
-        let multiplicationVariable = Math.floor(Math.random() * 12);
-        multiplicationVariable++;
-        let correctAnswerVariable;
-        if(randomSymbol === 0){
-          correctAnswerVariable = multiplicationVariable * tableVariable;
-        }
-        else{
-          let biggerNumber = Math.max(multiplicationVariable, tableVariable);
-          let smallerNumber = Math.min(multiplicationVariable, tableVariable)
-          while(biggerNumber % smallerNumber !== 0){
-            multiplicationVariable = Math.floor(Math.random() * 12);
-            multiplicationVariable++;
-            smallerNumber = Math.min(multiplicationVariable, tableVariable);
-            biggerNumber = Math.max(multiplicationVariable, tableVariable);
-          }
-          correctAnswerVariable = biggerNumber / smallerNumber
-        }
-        this.setState({correctAnswer: correctAnswerVariable, secondCount: this.state.secondCount+2, multiplication: multiplicationVariable, scoreCounter: this.state.scoreCounter+1})
+        setVariables();
+        this.setState({secondCount: this.state.secondCount+2, scoreCounter: this.state.scoreCounter+1})
       }
     }
 
@@ -153,8 +168,10 @@ class App extends Component{
 
     const setHighscore = () =>{
       let highscore = parseInt(localStorage.getItem("highscore"));
+
       if(!highscore){localStorage.setItem("highscore", this.state.scoreCounter); return this.state.scoreCounter}
       else if(this.state.scoreCounter > highscore){localStorage.setItem("highscore", this.state.scoreCounter); return this.state.scoreCounter}
+      
       return highscore;
     }
 
@@ -162,28 +179,43 @@ class App extends Component{
       
       <div id="flex-container">
         {!this.state.gameOn ?
+
           (<div class="game-div">
+            
             Table: <input type="number" min="1" max="20" onChange={setTable}></input><br/>
+            {/* min and max set the parameters for the input/table , if you change the limit you must also change it in "setTable" */}
+
             <button onClick={()=>{timerFunc()}}>Click here to start</button><br/>
+
             <input type="checkbox" id="division" name="include-division" value="include-division" onClick={()=>{this.setState({includeDivision: !this.state.includeDivision})} }></input>
+
             <label for="include-division">Include division</label><br/><br/><br/>
+            
             High score: {parseInt(localStorage.getItem("highscore")) || 0}<br/>
             To set a high score, you must leave<br/> the table blank and include division!
             {clearIntervalFunc()}
+
           </div>):
+
           (this.state.secondCount > 0 ?
+
           (<div class="game-div">
+
             Time:{this.state.secondCount} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Score: {this.state.scoreCounter}<br/><br/>
             {leftNumber()} {this.state.randomSymbol} {rightNumber()} = &nbsp;&nbsp;
             {clearIntervalFunc()}
             <input type="number"onChange={handleAnswer}></input>
+
           </div>):
+
           (<div class="game-div">
-            {}
+
             Score: {this.state.scoreCounter}<br/>
             {this.state.createHighScore ? <p>High score: {setHighscore()}</p>: <p></p>}
             <button onClick={()=>{window.location.reload()}}>Restart</button>
+
           </div>)
+
           )
           
         }
