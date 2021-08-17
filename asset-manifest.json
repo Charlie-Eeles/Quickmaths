@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Quickmaths/static/css/main.fb0ddfa2.chunk.css",
+    "main.js": "/Quickmaths/static/js/main.28389db9.chunk.js",
+    "main.js.map": "/Quickmaths/static/js/main.28389db9.chunk.js.map",
+    "runtime-main.js": "/Quickmaths/static/js/runtime-main.dab23c64.js",
+    "runtime-main.js.map": "/Quickmaths/static/js/runtime-main.dab23c64.js.map",
+    "static/js/2.f4edf6a2.chunk.js": "/Quickmaths/static/js/2.f4edf6a2.chunk.js",
+    "static/js/2.f4edf6a2.chunk.js.map": "/Quickmaths/static/js/2.f4edf6a2.chunk.js.map",
+    "static/js/3.ad63a9bf.chunk.js": "/Quickmaths/static/js/3.ad63a9bf.chunk.js",
+    "static/js/3.ad63a9bf.chunk.js.map": "/Quickmaths/static/js/3.ad63a9bf.chunk.js.map",
+    "index.html": "/Quickmaths/index.html",
+    "static/css/main.fb0ddfa2.chunk.css.map": "/Quickmaths/static/css/main.fb0ddfa2.chunk.css.map",
+    "static/js/2.f4edf6a2.chunk.js.LICENSE.txt": "/Quickmaths/static/js/2.f4edf6a2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dab23c64.js",
+    "static/js/2.f4edf6a2.chunk.js",
+    "static/css/main.fb0ddfa2.chunk.css",
+    "static/js/main.28389db9.chunk.js"
+  ]
+}
