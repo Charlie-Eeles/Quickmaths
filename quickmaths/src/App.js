@@ -11,7 +11,6 @@ class App extends Component{
     table: 12,
     multiplication: 0,
     gameOn:false,
-    potentialAnswer: 0,
     scoreCounter: 0,
     includeDivision: false,
     randomSymbol: 0,
@@ -55,8 +54,6 @@ class App extends Component{
 
     const handleAnswer = (e) => {
       const valFloat = parseFloat(e.target.value);
-
-      this.setState({potentialAnswer: valFloat})
 
       if(this.state.correctAnswer === valFloat && this.state.correctAnswer !== false){
         gameFunc(true);
